@@ -30,10 +30,10 @@ func main() {
 	fmt.Fprintf(os.Stderr, "\n")
 
 	switch {
-	case len(args) == 1 && args[0] == "mktorrent":
-		fmt.Fprintf(os.Stderr, "Usage: mktorrent [options] File\n\n")
+	case len(args) == 1 && args[0] == "maketorrent":
+		fmt.Fprintf(os.Stderr, "Usage: maketorrent [options] File\n\n")
 		flag.PrintDefaults()
-	case len(args) == 2 && args[0] == "mktorrent":
+	case len(args) == 2 && args[0] == "maketorrent":
 		clf := &CLFlags{
 			Name:         *name,
 			Announce:     *announce,
@@ -45,7 +45,7 @@ func main() {
 		t := MakeTorrentFile(args[1], clf)
 		fmt.Fprintf(os.Stderr, "Made torrent File: %s", t.Name())
 	default:
-		fmt.Fprintf(os.Stderr, "Available commands:\n\n mktorrent")
+		fmt.Fprintf(os.Stderr, "Available commands:\n\n maketorrent")
 	}
 	fmt.Fprintf(os.Stderr, "\n\n")
 }

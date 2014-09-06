@@ -5,7 +5,7 @@ Torrent Utils in GO
 
 ### Available Commands
 
-* mktorrent: Makes a torrent file for a given file
+* maketorrent: Makes a torrent file for a given file
 
 ### TODO
 
