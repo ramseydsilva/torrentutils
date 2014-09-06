@@ -6,6 +6,15 @@ import (
 	"os"
 )
 
+type CLFlags struct {
+	Name         string
+	Announce     string
+	AnnounceList string
+	Comment      string
+	CreatedBy    string
+	Encoding     string
+}
+
 func main() {
 
 	name := flag.String("name", "", "Tracker name, defaults to [file]+.torrent")

@@ -14,15 +14,6 @@ import (
 	"github.com/jackpal/bencode-go"
 )
 
-type CLFlags struct {
-	Name         string
-	Announce     string
-	AnnounceList string
-	Comment      string
-	CreatedBy    string
-	Encoding     string
-}
-
 type File struct {
 	Length int
 	Md5sum string
@@ -39,7 +30,6 @@ type Info struct {
 	Files       []File
 }
 
-// Metainfo File Structure
 type MetaInfo struct {
 	Info         Info
 	Announce     string
@@ -97,8 +87,7 @@ func MakeTorrentFile(filename string, clf *CLFlags) *os.File {
 		info.Length = int(fileInfo.Size())
 		info.Md5sum, info.Pieces = getMd5SumAndPieces(file, fileInfo.Size(), pieceLength)
 	} else {
-		log.Fatalf("Don't support multiple files")
-		//info.Files = []File{*file1}
+		log.Fatalf("Don't support multiple files, yet")
 	}
 
 	metaInfo := &MetaInfo{
