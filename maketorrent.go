@@ -15,29 +15,29 @@ import (
 )
 
 type File struct {
-	Length int
-	Md5sum string
-	Path   []string
+	length int
+	md5sum string
+	path   []string
 }
 
 type Info struct {
-	PieceLength int "piece length"
-	Pieces      string
-	Private     int
-	Name        string
-	Length      int
-	Md5sum      string
-	Files       []File
+	pieceLength int "piece length"
+	pieces      string
+	private     int
+	name        string
+	length      int
+	md5sum      string
+	files       []File
 }
 
 type MetaInfo struct {
-	Info         Info
-	Announce     string
-	AnnounceList []string "announce-list"
-	CreationDate int64    "creation date"
-	Comment      string
-	CreatedBy    string "created by"
-	Encoding     string
+	info         Info
+	announce     string
+	announceList []string "announce-list"
+	creationDate int64    "creation date"
+	comment      string
+	createdBy    string "created by"
+	encoding     string
 }
 
 func checkError(err error) {
@@ -68,39 +68,39 @@ func MakeTorrentFile(filename string, clf *CLFlags) *os.File {
 	checkError(err)
 
 	oneFile := true
-	const pieceLength = 2000000 // we setle for ~ 800KB
+	const pieceLength = 256000
 
 	fileInfo, err := file.Stat()
 	checkError(err)
 
 	info := &Info{
-		PieceLength: pieceLength,
-		Private:     0,
+		pieceLength: pieceLength,
+		private:     0,
 	}
 
 	if oneFile {
 		if clf.Name == "" {
-			info.Name = fileInfo.Name()
+			info.name = fileInfo.Name()
 		} else {
-			info.Name = clf.Name
+			info.name = clf.Name
 		}
-		info.Length = int(fileInfo.Size())
-		info.Md5sum, info.Pieces = getMd5SumAndPieces(file, fileInfo.Size(), pieceLength)
+		info.length = int(fileInfo.Size())
+		info.md5sum, info.pieces = getMd5SumAndPieces(file, fileInfo.Size(), pieceLength)
 	} else {
 		log.Fatalf("Don't support multiple files, yet")
 	}
 
 	metaInfo := &MetaInfo{
-		Info:         *info,
-		Announce:     clf.Announce,
-		AnnounceList: strings.Split(clf.AnnounceList, ","),
-		CreationDate: time.Now().Unix(),
-		Comment:      clf.Comment,
-		CreatedBy:    clf.CreatedBy,
-		Encoding:     clf.Encoding,
+		info:         *info,
+		announce:     clf.Announce,
+		announceList: strings.Split(clf.AnnounceList, ","),
+		creationDate: time.Now().Unix(),
+		comment:      clf.Comment,
+		createdBy:    clf.CreatedBy,
+		encoding:     clf.Encoding,
 	}
 
-	torrentFile, err := os.Create(strings.Replace(filename, fileInfo.Name(), info.Name, -1) + ".torrent")
+	torrentFile, err := os.Create(strings.Replace(filename, fileInfo.Name(), info.name, -1) + ".torrent")
 	defer torrentFile.Close()
 	checkError(err)
 	bencode.Marshal(torrentFile, *metaInfo)
